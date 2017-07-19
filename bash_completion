@@ -1,0 +1,9 @@
+complete -f -X '!*.@(eps|ps)' lpr
+complete -f -X '!*.pdf' lprPDF.sh
+
+complete -f -X '!*.@(ods|sxc)' oocalc
+complete -f -X '*.@(log|aux|o|ps|pdf|dvi)' emacs
+
+
+# needs /etc/bash_completion
+shopt -u hostcomplete && complete -F _ssh s
