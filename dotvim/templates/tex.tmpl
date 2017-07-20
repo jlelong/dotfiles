@@ -1,0 +1,99 @@
+\documentclass[a4paper,11pt,twoside]{article}
+\usepackage{a4wide}
+\usepackage{amssymb, amsmath, amsthm}
+\usepackage{t1enc,lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+% must be loaded before babel
+\usepackage[round]{natbib}
+
+\usepackage[<++>]{babel}
+
+\def\cite{\citet}
+
+%--------------------------------------------
+\hbadness=10000
+\emergencystretch=\hsize
+\tolerance=9999
+\textheight=9.0in
+%--------------------------------------------
+
+
+% macros
+\def\cd{{\mathcal D}}
+\def\ce{{\mathcal E}}
+\def\cf{{\mathcal F}}
+\def\cg{{\mathcal G}}
+\def\ch{{\mathcal H}}
+\def\cl{{\mathcal L}}
+\def\C{{\mathbb C}}
+\def\D{{\mathbb D}}
+\def\E{{\mathbb E}}
+\def\L{{\mathbb L}}
+\def\N{{\mathbb N}}
+\def\P{{\mathbb P}}
+\def\Q{{\mathbb Q}}
+\def\R{{\mathbb R}}
+\def\Z{{\mathbb Z}}
+\def\s{\star}
+\def\rP{\mathop{\rm P}\nolimits}
+\def\rQ{\mathop{\rm Q}\nolimits}
+\def\rpartial{{\rm d}}
+\def\ind#1{{\bf 1}_{#1}}
+\def\id{{\mathcal I}}
+\def\abs#1{\left|#1\right|}
+\def\Cov{\mathop{\rm Cov}\nolimits}
+\def\Var{\mathop{\rm Var}\nolimits}
+\def\norm#1{\mathop{\left\| #1 \right\|}\nolimits}
+\def\inv#1{\mathop{\frac{1}{ #1}}\nolimits}
+\def\expp#1{\mathop {\mathrm{e}^{ #1}}}
+\def\interior#1{\mathop {\mathrm{int}(#1)}}
+%--------------------------------------------
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{cor}[thm]{Corollary}
+\theoremstyle{definition}
+\newtheorem{ack}[thm]{Acknowledgement}
+\renewcommand{\qedsymbol}{$\blacksquare$}
+%-------------------------------------------
+% hypo
+\makeatletter
+\newcounter{hypo}
+\newcommand*{\dohypo}{\textbf{(${\mathcal A}$\thehypo)}}
+\newenvironment{hypo}[1][]{%
+  \renewcommand{\labelenumi}{{{\bf \it \roman{enumi}}}.}
+  \refstepcounter{hypo}
+  \list{}{%
+    \settowidth{\labelwidth}{\dohypo}%
+    \setlength{\labelsep}{10pt}%
+    \setlength{\leftmargin}{\labelwidth}
+    \advance\leftmargin\labelsep%
+  }%
+\item[\dohypo  #1]%
+}{%
+  \endlist
+}
+
+\def\subhypo{\enumerate[label={\it \roman{*}.}, ref=\roman{*}]}
+\def\endsubhypo{\endenumerate}
+
+\def\hypref#1{\hyperref[hyp:#1]{(${\mathcal A}$\ref*{hyp:#1})}}
+\def\hypreff#1#2{\hyperref[hyp:#2]{(${\mathcal A}$\ref*{hyp:#1}-{\it \ref*{hyp:#2})}}}
+
+\makeatother
+% end macros
+%-----------------------------------------
+
+\title{<++>}
+\date{\today}
+\author{J\'er\^ome Lelong\footnote{Laboratoire Jean Kuntzmann, Universit\'e de
+    Grenoble et CNRS, BP 53, 38041 Grenoble C\'edex 9, FRANCE, 
+    e-mail : jerome.lelong@imag.fr}}
+  
+\begin{document}
+\maketitle
+<++>
+\end{document}

@@ -1,0 +1,81 @@
+\documentclass[11pt]{letter}
+\usepackage{a4}
+\usepackage{latexsym}
+\usepackage{fancyhdr}
+\usepackage{t1enc,lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+
+\setlength{\textwidth}         {14cm}
+\setlength{\oddsidemargin}     {1cm}
+\setlength{\evensidemargin}    {1cm}
+\setlength{\textheight}        {24cm}
+\addtolength{\topmargin}       {-6cm}
+
+% ---------------------------------------------
+% a few hacks to the standard style
+\makeatletter
+\renewcommand*{\opening}[1]{\ifx\@empty\fromaddress
+  \thispagestyle{firstpage}%
+    {\raggedright\@date\par}%
+  \else  % home address
+    \thispagestyle{empty}%
+    {\raggedright\begin{tabular}[t]{l@{}}\ignorespaces
+      \fromaddress 
+    \end{tabular}\hfill\@date\par}%
+  \fi
+  \vskip2\parskip
+  \thispagestyle{empty}%
+  {\raggedleft\begin{tabular}{l@{}}\ignorespaces
+      \toname\\ \toaddress \\*[2\parskip]%
+      \end{tabular}\par}%
+  \vspace{2\parskip}%
+  \ifx\@empty\else\letterobject\par\fi
+  \vspace{2\parskip}%
+  #1\par\nobreak}
+
+\renewcommand{\closing}[1]{\par\nobreak\vspace{\parskip}%
+  \stopbreaks
+  \noindent
+  \ifx\@empty\fromaddress\else\fi
+  \ignorespaces #1\\[3\medskipamount]%
+  \hspace*{\longindentation}
+  \ifx\@empty\fromsig
+      \fromname
+  \else \fromsig \fi\strut
+  \par}
+
+\makeatother
+% ---------------------------------------------
+\parindent0cm
+
+\def\tsvp{\vspace{1cm}\hfill .../... \clearpage \mbox{}\vspace{3cm}}
+\def\object#1{\def\letterobject{{\bf Object~:~}#1}}
+
+\address{
+  Jérôme Lelong\\
+  bureau 31\\
+  LJK, Tour IRMA\\
+  51, rue des Mathématiques\\
+  38400 St Martin d'Hères\\
+  tel : 04 76 63 56 93\\
+  email : jerome.lelong@imag.fr
+}
+
+\date{}
+
+\signature{{\hspace{3cm}Jérôme Lelong}}
+\object{obj}
+
+\begin{document}
+
+\begin{letter}{
+% receiver
+  }
+
+  \opening{Monsieur,}
+  
+  \closing{Veuillez croire Madame, Monsieur, en l'expression de mes sentiments distingués}
+\end{letter}
+\end{document}
+
