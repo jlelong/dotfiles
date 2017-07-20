@@ -1,0 +1,120 @@
+\documentclass[a4paper,11pt,twoside]{article}
+\usepackage{a4wide}
+\usepackage{amssymb, amsmath, amsthm}
+\usepackage{lmodern,t1enc}
+\usepackage[latin1]{inputenc}
+\usepackage{enumitem}
+\usepackage[round]{natbib}
+
+%% <+ choose the language +>
+\usepackage[french]{babel}
+\usepackage[english]{babel}
+
+\def\cite{\citet}
+
+%%--------------------------------------------
+\hbadness=10000
+\emergencystretch=\hsize
+\tolerance=9999
+\textheight=9.0in
+%%--------------------------------------------
+
+
+%% macros
+\def\ca{{\mathcal A}}
+\def\cb{{\mathcal B}}
+\def\cc{{\mathcal C}}
+\def\cd{{\mathcal D}}
+\def\ce{{\mathcal E}}
+\def\cf{{\mathcal F}}
+\def\cg{{\mathcal G}}
+\def\ch{{\mathcal H}}
+\def\ci{{\mathcal I}}
+\def\cj{{\mathcal J}}
+\def\ck{{\mathcal K}}
+\def\cl{{\mathcal L}}
+\def\cn{{\mathcal N}}
+\def\cm{{\mathcal M}}
+\def\co{{\mathcal O}}
+\def\cp{{\mathcal P}}
+\def\cs{{\mathcal S}}
+\def\cu{{\mathcal U}}
+\def\cv{{\mathcal V}}
+\def\cw{{\mathcal W}}
+\def\cx{{\mathcal X}}
+\def\C{{\mathbb C}}
+\def\D{{\mathbb D}}
+\def\E{{\mathbb E}}
+\def\L{{\mathbb L}}
+\def\N{{\mathbb N}}
+\def\P{{\mathbb P}}
+\def\Q{{\mathbb Q}}
+\def\R{{\mathbb R}}
+\def\Z{{\mathbb Z}}
+\def\s{\star}
+\def\rP{{\rm P}}
+\def\rQ{{\rm Q}}
+\def\rpartial{{\rm d}}
+\def\ind#1{{\bf 1}_{#1}}
+\def\id{{\mathcal I}}
+\def\abs#1{\left|#1\right|}
+\def\supp{{\rm supp}\;}
+\def\Det{{\rm det}\;}
+\def\Card{{\rm Card}\;}
+\def\Cov{{\rm Cov}\;}
+\def\Var{\mathop{\rm Var}\nolimits}
+\def\var{\text{Var}}
+\def\norm#1{\mathop{\left\| #1 \right\|}\nolimits}
+\def\inv#1{\mathop{\frac{1}{ #1}}\nolimits}
+\def\expp#1{\mathop {\mathrm{e}^{ #1}}}
+\def\interior#1{\mathop {\mathrm{int}(#1)}}
+%%--------------------------------------------
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}
+\newtheorem{prop}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{rem}{Remark}
+\newtheorem{cor}{Corollary}
+\theoremstyle{definition}
+\newtheorem*{ack}{Acknowledgement}
+\renewcommand{\qedsymbol}{$\blacksquare$}
+%%-------------------------------------------
+%% hypo
+\makeatletter
+\newcounter{hypo}
+\newcommand*{\dohypo}{\textbf{(${\mathcal A}$\thehypo)}}
+\newenvironment{hypo}[1][]{%
+  \renewcommand{\labelenumi}{{{\bf \it \roman{enumi}}}.}
+  \refstepcounter{hypo}
+  \list{}{%
+    \settowidth{\labelwidth}{\dohypo}%
+    \setlength{\labelsep}{10pt}%
+    \setlength{\leftmargin}{\labelwidth}
+    \advance\leftmargin\labelsep%
+  }%
+\item[\dohypo  #1]%
+}{%
+  \endlist
+}
+
+\def\subhypo{\enumerate[label={\it \roman{*}.}, ref=\roman{*}]}
+\def\endsubhypo{\endenumerate}
+
+\def\hypref#1{\hyperref[hyp:#1]{(${\mathcal A}$\ref*{hyp:#1})}}
+\def\hypreff#1#2{\hyperref[hyp:#2]{(${\mathcal A}$\ref*{hyp:#1}-{\it \ref*{hyp:#2})}}}
+
+\makeatother
+%% end macros
+%%-----------------------------------------
+
+\title{}
+\date{\today}
+\author{J\'er\^ome Lelong\footnote{Laboratoire Jean Kuntzmann, Universit\'e de
+    Grenoble et CNRS, BP 53, 38041 Grenoble C\'edex 9, FRANCE, 
+    e-mail : jerome.lelong@imag.fr}}
+  
+
+\begin{document}
+\maketitle
+  
+\end{document}

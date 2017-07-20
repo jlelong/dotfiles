@@ -1,0 +1,379 @@
+;; -*- mode:lisp; coding:latin-1; -*-
+
+;; Author : Jérôme LELONG
+;; jerome.lelong@imag.fr
+;; http://www-ljk.imag.fr/membres/Jerome.Lelong/
+;; Unlimited permission is granted to use, copy, distribute, and/or
+;; modify this program.  There is NO WARRANTY.
+
+;; --------------------------------------------------------- ;;
+;; 0 for no and 1 for yes
+
+(setq use-scilab 1)
+(setq use-Mew 0)
+
+;; --------------------------------------------------------- ;;
+;; a few more loads
+(add-to-list 'load-path "~/local/emacs.d")
+(add-to-list 'load-path "~/local/emacs.d/company-mode/")
+(add-to-list 'load-path "/usr/share/emacs/site-lisp")
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
+
+(setq user-full-name "Jérôme Lelong")
+(setq user-mail-address "jerome.lelong@gmail.com")
+
+;; More items in PATH
+(add-to-list 'exec-path "/usr/local/bin")
+(add-to-list 'exec-path "/usr/texbin")
+(setenv "PATH" (concat (getenv "PATH") ":/usr/texbin"))
+
+
+;; a few personnal loadings
+;;(when (locate-library "jl-Perl-mode")
+;;  (require 'jl-Perl-mode))
+(when (locate-library "jl-C-C++mode")
+  (require 'jl-C-C++mode))
+(when (locate-library "jl-macro")
+  (require 'jl-macro))
+(when (locate-library "tex-site")
+  (require 'jl-latex-mode))
+(when (locate-library "cmake-mode")
+  (require 'cmake-mode))
+; (load-file "~/local/emacs.d/jl-menu.el")
+(when (locate-library "doxymacs")
+  (require 'doxymacs))
+
+
+;; Stuff for Pnl
+; (load-file "~/local/emacs.d/pnl.el")
+
+;; --------------------------------------------------------- ;;
+;; a few tweaks for terminal usage
+(defmacro Xlaunch (&rest x) (list 'if (not(eq window-system nil))(cons 'progn x)))
+(defmacro Termlaunch (&rest x) (list 'if (eq window-system nil)(cons 'progn x)))
+
+;; a few tweaks for Meta-Alt on OS X
+(setq mac-option-key-is-meta t)
+(setq mac-command-key-is-meta t)
+(setq mac-command-modifier 'meta)
+(setq mac-option-modifier nil)
+
+;; (Termlaunch
+;;   (require 'xt-mouse)
+;;   (xterm-mouse-mode)
+;;   (global-set-key [(mouse-4)]     'scroll-down-line)
+;;   (global-set-key [(mouse-5)]     'scroll-up-line)
+;;   )
+;; --------------------------------------------------------- ;;
+;; encoding facilities
+
+(Termlaunch
+  (define-key function-key-map "\e[4~" [end])
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  )
+
+;; (set-input-mode nil nil 1)
+;; (prefer-coding-system 'utf-8)
+;; (set-language-environment 'utf-8)
+;; (set-default-coding-systems 'latin-1)
+
+;; --------------------------------------------------------- ;;
+
+
+;; --------------------------------------------------------- ;;
+;; Faces definition
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(font-latex-math-face ((((class color) (background light)) (:foreground "orangered"))) t)
+ '(font-latex-sedate-face ((((class color) (background light)) (:foreground "green4"))) t)
+ '(scilab-builtin-face ((t (:foreground "red3" :weight bold))) t))
+
+
+(setq default-frame-alist '((cursor-color . "orange")
+                             (width . 95)
+                             (height . 53)
+                             (font . "Monaco-11")
+                             ; (tool-bar-lines . 0)
+                             (background-mode . dark)
+                             (vertical-scroll-bars . nil)))
+(Termlaunch
+  ;; (set-background-color "black")
+  ;; (set-face-background 'default "black")
+  ;; (set-face-background 'region "black")
+  ;; (set-face-foreground 'default "white")
+  (set-face-background 'region "gray10")
+  ;; (set-foreground-color "white")
+  ;; (set-cursor-color "red")
+  )
+
+;; --------------------------------------------------------- ;;
+
+
+;; --------------------------------------------------------- ;;
+;; Choose the correct mode  and hook
+
+(setq auto-mode-alist
+  (append
+    '(
+       ("\\.tex$" . LaTeX-mode)
+       ("\\.emacs$" . emacs-lisp-mode)
+       ("\\.\\(sci\\|sce\\)$" . scilab-mode)
+       ("\\.m$" . octave-mode)
+       ("CMakeLists\\.txt\\'" . cmake-mode)
+       ("\\.cmake\\'" . cmake-mode)
+       ("\\.org\\'" . org-mode)
+       )
+    auto-mode-alist)
+  )
+
+;; --------------------------------------------------------- ;;
+
+(setq default-major-mode 'indented-text-mode)
+(global-font-lock-mode t)
+(setq font-lock-verbose nil)
+
+
+;; --------------------------------------------------------- ;;
+;; server config
+(Xlaunch
+  (server-start)
+  (add-hook 'server-switch-hook 'raise-frame)
+  )
+
+;; --------------------------------------------------------- ;;
+;; Switch to buffer
+
+
+(defun ignore-kill-buffer (str)
+  (or
+    ;;buffers I don't want to switch to
+    (string-match "^\\*Messages\\*$" str)
+    (string-match "^\\*scratch\\*$" str)
+    ))
+
+(defun kill-all-buffers ()
+  (interactive)
+  (let ((Lbuff (buffer-list)))
+    (while Lbuff
+      (let ((buff (buffer-name (car Lbuff))))
+        (if (not (ignore-kill-buffer buff))
+          (kill-buffer buff))
+        (setq Lbuff (cdr Lbuff))))
+    ))
+
+(defun ignore-buffer (str)
+  (or
+    ;;buffers I don't want to switch to
+    (string-match "\\*Buffer List\\*" str)
+    (string-match "/*TAGS" str)
+    (string-match "/*tags" str)
+    (string-match "^\\*Messages\\*$" str)
+    (string-match "^\\*Completions\\*$" str)
+    (string-match "^\\*scratch\\*$" str)
+    (string-match "^ " str)
+    (string-match "output\\*$" str)
+    (string-match "compilation" str)
+    (string-match "^\\*TeX silent\\*$" str)
+    ))
+
+(defun cycle-buffer-list (func)
+  "Cycle through the list of buffer is the direction given by the arg
+func (which is a function). Buffers listed in ignore-buffer are
+ignored and we use a special tweak to avoid infinte loop when there is
+no non-ignored buffer in the list"
+    (let ((len (list-length (buffer-list))) (i 1))
+    (funcall func)
+    (while (and (ignore-buffer (buffer-name)) (< i (* 3 len)))
+      (funcall func)
+      (setq i (1+ i)))
+    ))
+
+(defun next-user-buffer ()
+  "Switch to the next user buffer in cyclic order."
+  (interactive) (cycle-buffer-list 'next-buffer))
+
+(defun previous-user-buffer ()
+  "Switch to the previous user buffer in cyclic order."
+  (interactive) (cycle-buffer-list 'previous-buffer))
+
+
+;; ;; --------------------------------------------------------- ;;
+;; ;; Custon variables
+
+;; remember file positions
+(when (require 'saveplace)
+  (setq-default save-place t)
+  (setq save-place-version-control nil)
+  (setq save-place-limit 50)
+  )
+
+(setq make-backup-files t) ;; always make backups
+(setq backup-by-copying t)
+(setq version-control t)     ;; numbered backups
+(setq delete-old-versions t) ;; Delete excess backup versions
+(global-auto-revert-mode 1)
+
+(delete-selection-mode t)
+(setq transient-mark-mode t)
+(show-paren-mode t)
+(setq blink-matching-paren t)
+(setq show-paren-style 'parenthesis)
+(setq blink-matching-paren-dont-ignore-comments nil)
+
+(setq column-number-mode t)
+(setq default-tab-width 4)
+(setq-default indent-tabs-mode nil)
+(setq case-fold-search nil)
+(setq tags-case-fold-search t)
+(setq case-replace t)
+(setq read-file-name-completion-ignore-case t)
+(setq kill-whole-line t)
+(setq require-final-newline t)
+(setq track-eol t)
+(setq visible-bell nil)
+(setq inhibit-startup-message t)
+(fset 'yes-or-no-p 'y-or-n-p)
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
+(setq icon-title-format  nil)
+(setq use-dialog-box nil)
+(setq use-file-dialog nil)
+
+;; wheel scrolls too much
+(Xlaunch
+  (setq mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil))))
+
+;; --------------------------------------------------------- ;;
+;; spell check
+;; Setting ispell-program-name makes spell processes hang when called
+;; on .tex files (with Auctex)
+;;(setq-default ispell-program-name "aspell")
+(setq ispell-dictionary "english")
+(setq term-file-prefix nil)
+
+;; --------------------------------------------------------- ;;
+;; General keybindings
+
+;; C-z is a new prefix
+(global-set-key "\C-z" nil)
+
+(global-set-key [delete]        'delete-char)
+(global-set-key [(control tab)] 'other-window)
+(global-set-key "\C-z\t"        'indent-region)
+(global-set-key "\C-zq"         'fill-region-as-paragraph)
+(global-set-key "\C-z\r\t"      'indent-buffer)
+(global-set-key "\C-c;"         'comment-region)
+(global-set-key "\C-c:"         'uncomment-region)
+(global-set-key "\C-z;"         'comment-region)
+(global-set-key "\C-z:"         'uncomment-region)
+(global-set-key "\C-m"          'newline-and-indent)
+(global-set-key [(f2)]          'jl-prog-accolade)
+(global-set-key "\C-za"         'align-entire)
+(global-set-key [(f6)]          'compile)
+(global-set-key [(control f6)]  'next-error)
+(global-set-key [(f11)]         'dabbrev-expand)
+(global-set-key [S-right]       'next-user-buffer)
+(global-set-key [S-left]        'previous-user-buffer)
+
+
+;; --------------------------------------------------------- ;;
+
+;; --------------------------------------------------------- ;;
+;; a few more functions to key bind
+
+(defun jl-prog-accolade ()
+  "Insert a pair of curly braces according to Gnu coding style"
+  (interactive)
+  (insert "{") (indent-according-to-mode) (newline-and-indent)
+  (newline-and-indent) (insert "}") (indent-according-to-mode)
+  (forward-line -1) (indent-according-to-mode)
+  )
+
+;; --------------------------------------------------------- ;;
+;; Stuff for HTML
+
+(add-hook 'html-mode-hook
+  '(lambda()
+     (setq fill-column 90)
+     (setq comment-style 'plain)))
+
+(when (locate-library "css-mode")
+  (setq cssm-indent-function 'cssm-c-style-indenter))
+
+;; --------------------------------------------------------- ;;
+;; Stuff for Bash
+(setq sh-indentation 4)
+(setq sh-shell-file "/bin/sh")
+
+
+;; --------------------------------------------------------- ;;
+;; Stuff for Lisp
+(require 'cl)
+(setq lisp-indent-function 'common-lisp-indent-function)
+(setq lisp-indent-offset 2)
+(add-hook 'lisp-mode-hook
+  '(lambda()
+     (define-key lisp-mode-map [(f1)]  'describe-function)
+     ))
+
+;;------------------------------------------------------------;;
+;; Stuff for Python
+(require 'python)
+
+;; --------------------------------------------------------- ;;
+;; using scilab
+(if(= use-scilab 1)
+  (progn
+    (when (locate-library "scilab")
+      (autoload 'scilab-mode "scilab" "Enter Scilab editing mode." t)
+      (autoload 'scilab-mode-setup "scilab" "Scilab modes Setup." t)      
+      (add-hook 'scilab-mode-hook '(lambda () (setq fill-column 90)))
+      )))
+
+;;-----------------------------------------------------;;
+
+;;-----------------------------------------------------;;
+;; Mew
+(if(= use-Mew 1)
+  (progn
+    (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mew")
+    (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mew/etc")
+    (load-file "~/live/local/emacs.d/emacs.mew")
+    (global-set-key "\M-m"          'mew))
+  )
+;;-----------------------------------------------------;;
+
+
+;;-----------------------------------------------------;;
+;; Auto complete
+; (require 'company)
+; (setq company-clang-arguments
+;   '("-I/usr/local/include"
+;  "-I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/6.0/include"
+;  "-I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"
+;  "-I/usr/include"
+;  "-I/System/Library/Frameworks"
+;  "-I/Library/Frameworks"
+;  "-I/Users/jl/devel/pnl-git/build/include")
+;  )
+; (add-hook 'c-mode-hook 'company-mode)
+; (add-hook 'c++-mode-hook 'company-mode)
+; (global-set-key [(f12)]          'company-complete)
+
+;;-----------------------------------------------------;;
+
+
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+;  (Xlaunch '(custom-enabled-themes (quote (wombat))))
+ '(gud-gdb-command-name "gdb --annotate=1")
+ '(large-file-warning-threshold nil))
