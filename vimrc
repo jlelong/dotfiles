@@ -1,8 +1,6 @@
 " Jerome Lelong <jerome.lelong@gmail.com>
 
 
-let g:yankring_history_dir='$HOME/.vim'
-let g:yankring_replace_n_pkey = '<C-y>'
 filetype off                  " required
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -35,6 +33,7 @@ Plugin 'Valloric/MatchTagAlways'
 Plugin 'jceb/vim-orgmode'
 Plugin 'tpope/vim-speeddating'
 Plugin 'dhruvasagar/vim-table-mode'
+Plugin 'vim-scripts/YankRing.vim'
 call vundle#end()            " required"
 
 filetype plugin indent on 
@@ -163,6 +162,8 @@ let g:plaintex_delimiters=1
 let g:formatprg_args_expr_c='"--style=gnu -pHUs".&shiftwidth'
 let g:formatprg_args_expr_cpp='"--style=gnu -pHUSk3W3s".&shiftwidth'
 let g:vimrplugin_assign_map='--'
+let g:yankring_history_dir='$HOME/.vim'
+let g:yankring_replace_n_pkey = '<C-y>'
 " }}}
 
 " Appearance properties {{{
